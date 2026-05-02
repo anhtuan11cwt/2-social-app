@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/app/auth";
 import CreatePostInput from "@/components/post/CreatePostInput";
+import PostFeed from "@/components/post/PostFeed";
 
 export default async function HomePage() {
   const session = await auth();
@@ -10,14 +11,9 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen">
       <CreatePostInput />
-
-      <div className="space-y-4">
-        <div className="bg-dark-2 p-4 rounded-lg">
-          <p className="text-gray-400">Bảng tin bài viết</p>
-        </div>
-      </div>
+      <PostFeed />
     </div>
   );
 }

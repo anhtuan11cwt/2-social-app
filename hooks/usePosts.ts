@@ -3,7 +3,7 @@ import { getPosts } from "@/services/post.service";
 
 export function usePosts() {
   return useQuery({
-    queryFn: getPosts,
+    queryFn: () => getPosts(undefined),
     queryKey: ["posts"],
   });
 }

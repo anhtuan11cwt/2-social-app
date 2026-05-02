@@ -1,8 +1,15 @@
 import { axiosInstance } from "@/lib/axios";
 import type { CreatePostDTO, Post } from "@/types/post";
 
-export async function getPosts(): Promise<Post[]> {
-  const res = await axiosInstance.get<Post[]>("/posts");
+export interface GetPostsResponse {
+  nextCursor: string | null;
+  posts: Post[];
+}
+
+export async function getPosts(cursor?: string): Promise<GetPostsResponse> {
+  const res = await axiosInstance.get<GetPostsResponse>("/posts/feed", {
+    params: { cursor, limit: 10 },
+  });
   return res.data;
 }
 
