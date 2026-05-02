@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/app/auth";
 import prisma from "@/app/lib/prisma";
+import { pusher } from "@/lib/pusher";
 
 export async function POST(
   _req: Request,
@@ -56,6 +57,25 @@ export async function POST(
         },
       });
       liked = true;
+
+      // Send notification to post author (only if not liking own post)
+      if (post.authorId !== userId) {
+        const notification = await prisma.notification.create({
+          data: {
+            message: "Có người đã thích bài đăng của bạn",
+            postId,
+            type: "LIKE",
+            userId: post.authorId,
+          },
+        });
+
+        // Trigger real-time notification via Pusher
+        await pusher.trigger(
+          `notifications-${post.authorId}`,
+          "new-notification",
+          notification,
+        );
+      }
     }
 
     return NextResponse.json(

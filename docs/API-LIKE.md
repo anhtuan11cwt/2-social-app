@@ -1,7 +1,6 @@
 # Like API – Tài liệu Postman
 
-**Base URL**: `http://localhost:3000`  
-**Prefix**: `/api/posts/{postId}/like`
+**Base URL**: `http://localhost:3000`
 
 ---
 
