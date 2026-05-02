@@ -19,7 +19,7 @@ export default function PostCard({ post }: PostCardProps) {
 
   return (
     <article className="hover:bg-gray-900/50 p-4 border-gray-800 border-b transition-colors">
-      <Link className="block" href={`/post/${post.id}`}>
+      <Link className="block" href={`/posts/${post.id}`}>
         {/* Header */}
         <div className="flex items-start gap-3">
           <div className="relative w-10 h-10 shrink-0">
