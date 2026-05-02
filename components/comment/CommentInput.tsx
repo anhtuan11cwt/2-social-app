@@ -4,13 +4,15 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useCreateComment } from "@/hooks/useCreateComment";
+import { useCurrentUser } from "@/hooks/useUser";
 
 interface CommentInputProps {
   postId: string;
 }
 
 export default function CommentInput({ postId }: CommentInputProps) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+  const { data: currentUser } = useCurrentUser();
   const { mutate, isPending } = useCreateComment(postId);
 
   const [content, setContent] = useState("");
@@ -43,7 +45,7 @@ export default function CommentInput({ postId }: CommentInputProps) {
 
   if (status !== "authenticated") {
     return (
-      <div className="p-4 text-gray-500 text-center text-sm">
+      <div className="p-4 text-gray-500 text-sm text-center">
         Đăng nhập để bình luận
       </div>
     );
@@ -52,12 +54,12 @@ export default function CommentInput({ postId }: CommentInputProps) {
   return (
     <div className="flex gap-3 p-4">
       <div className="relative w-10 h-10 shrink-0">
-        {session?.user?.image ? (
+        {currentUser?.image ? (
           <Image
             alt="ảnh đại diện"
             className="rounded-full object-cover"
             fill
-            src={session.user.image}
+            src={currentUser.image}
           />
         ) : (
           <div className="flex justify-center items-center bg-gray-700 rounded-full w-full h-full">
@@ -68,7 +70,7 @@ export default function CommentInput({ postId }: CommentInputProps) {
 
       <div className="flex-1">
         <textarea
-          className="bg-transparent p-2 border border-gray-700 rounded-lg w-full min-h-[80px] text-white placeholder:text-gray-500 resize-none focus:outline-none focus:border-blue-500"
+          className="bg-transparent p-2 border border-gray-700 focus:border-blue-500 rounded-lg focus:outline-none w-full min-h-[80px] text-white placeholder:text-gray-500 resize-none"
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {

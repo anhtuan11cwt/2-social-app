@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useFollowUser } from "@/hooks/useFollowUser";
 import { axiosInstance } from "@/lib/axios";
@@ -56,7 +57,10 @@ export default function RightSidebar() {
               className="flex justify-between items-center bg-dark-2 p-3 rounded-lg"
               key={user.id}
             >
-              <div className="flex items-center gap-3">
+              <Link
+                className="flex items-center gap-3 hover:bg-dark-3 p-1 rounded transition"
+                href={`/profile/${user.id}`}
+              >
                 {user.image ? (
                   <Image
                     alt={user.name || "người dùng"}
@@ -74,7 +78,7 @@ export default function RightSidebar() {
                   <p className="font-medium text-sm">{user.name}</p>
                   <p className="text-gray-400 text-sm">@{user.username}</p>
                 </div>
-              </div>
+              </Link>
 
               <button
                 className={`px-3 py-1.5 rounded text-sm transition cursor-pointer disabled:cursor-not-allowed ${

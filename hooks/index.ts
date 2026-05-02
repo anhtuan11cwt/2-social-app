@@ -2,6 +2,7 @@ export * from "./useCreateComment";
 export * from "./useCreatePost";
 export * from "./useGetComments";
 export * from "./useGetPosts";
+export * from "./useGetUser";
 export * from "./useIntersectionObserver";
 export * from "./useLikePost";
 export * from "./usePosts";
