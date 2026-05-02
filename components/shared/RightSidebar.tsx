@@ -1,30 +1,42 @@
-import Image from "next/image";
-import { auth } from "@/app/auth";
-import prisma from "@/app/lib/prisma";
+"use client";
 
-export default async function RightSidebar() {
-  const session = await auth();
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useFollowUser } from "@/hooks/useFollowUser";
+import { axiosInstance } from "@/lib/axios";
+
+interface SuggestedUser {
+  id: string;
+  image: string | null;
+  isFollowing: boolean;
+  name: string | null;
+  username: string;
+}
+
+export default function RightSidebar() {
+  const { data: session } = useSession();
+  const { followUserMutation, loading } = useFollowUser();
+
+  const { data: users = [] } = useQuery<SuggestedUser[]>({
+    enabled: !!session?.user?.id,
+    queryFn: async () => {
+      if (!session?.user?.id) return [];
+
+      const response = await axiosInstance.get("/users/suggestions");
+      return response.data;
+    },
+    queryKey: ["follow-suggestions"],
+  });
+
+  const handleFollow = (userId: string) => {
+    if (!session?.user?.id) return;
+    followUserMutation(userId);
+  };
 
   if (!session?.user?.id) {
     return null;
   }
-
-  const currentUserId = session.user.id;
-
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      image: true,
-      name: true,
-      username: true,
-    },
-    take: 5,
-    where: {
-      id: {
-        not: currentUserId,
-      },
-    },
-  });
 
   return (
     <div className="top-24 sticky space-y-4">
@@ -33,7 +45,7 @@ export default async function RightSidebar() {
       {users.length === 0 ? (
         <div className="bg-dark-2 p-4 rounded-lg">
           <p className="text-gray-400 text-sm">
-            Không có gợi ý người dùng ngay bây giờ
+            Hiện không có gợi ý người dùng nào
           </p>
           <p className="mt-1 text-gray-500 text-xs">Bạn đã xem hết tất cả</p>
         </div>
@@ -47,7 +59,7 @@ export default async function RightSidebar() {
               <div className="flex items-center gap-3">
                 {user.image ? (
                   <Image
-                    alt={user.name || "user"}
+                    alt={user.name || "người dùng"}
                     className="rounded-full object-cover"
                     height={40}
                     src={user.image}
@@ -65,10 +77,20 @@ export default async function RightSidebar() {
               </div>
 
               <button
-                className="bg-primary hover:bg-primary-hover px-3 py-1.5 rounded text-sm transition"
+                className={`px-3 py-1.5 rounded text-sm transition cursor-pointer disabled:cursor-not-allowed ${
+                  user.isFollowing
+                    ? "bg-gray-600 hover:bg-gray-700 text-white"
+                    : "bg-primary hover:bg-primary-hover text-white"
+                } disabled:opacity-50`}
+                disabled={loading}
+                onClick={() => handleFollow(user.id)}
                 type="button"
               >
-                Theo dõi
+                {loading
+                  ? "Đang xử lý..."
+                  : user.isFollowing
+                    ? "Đang theo dõi"
+                    : "Theo dõi"}
               </button>
             </div>
           ))}
