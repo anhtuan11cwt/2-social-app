@@ -1,9 +1,10 @@
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Heart, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Post } from "@/types/post";
+import LikeButton from "./LikeButton";
 
 interface PostCardProps {
   post: Post;
@@ -63,19 +64,11 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-6 mt-3 pl-13">
-        <button
-          aria-label="Thích bài đăng"
-          className="group flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors"
-          type="button"
-        >
-          <Heart
-            aria-hidden="true"
-            className="w-5 h-5 group-hover:scale-110 transition-transform"
-          />
-          <span className="text-sm">
-            {(post._count?.likes ?? 0) || (post.likes?.length ?? 0)}
-          </span>
-        </button>
+        <LikeButton
+          initialLiked={post.isLiked ?? false}
+          initialLikesCount={post._count?.likes ?? post.likes?.length ?? 0}
+          postId={post.id}
+        />
 
         <Link
           className="group flex items-center gap-2 text-gray-500 hover:text-blue-500 transition-colors"

@@ -50,9 +50,15 @@ export async function GET(req: Request) {
       nextCursor = nextItem?.id || null;
     }
 
+    // Add isLiked field for current user
+    const postsWithLikeStatus = posts.map((post) => ({
+      ...post,
+      isLiked: post.likes.some((like) => like.userId === session.user.id),
+    }));
+
     return NextResponse.json({
       nextCursor,
-      posts,
+      posts: postsWithLikeStatus,
     });
   } catch (error) {
     console.error("GET POSTS ERROR:", error);

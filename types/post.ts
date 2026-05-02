@@ -13,6 +13,7 @@ export interface Post {
   id: string;
   image?: string;
   imagePublicId?: string;
+  isLiked?: boolean;
   likes?: unknown[];
   updatedAt: string;
 }
