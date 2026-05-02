@@ -111,7 +111,7 @@ export default function PostPage() {
 
           {/* Image */}
           {post.image && (
-            <div className="relative mt-4 rounded-xl w-full max-h-[600px] aspect-auto overflow-hidden">
+            <div className="relative mt-4 rounded-xl w-full max-h-[600px] aspect-video overflow-hidden">
               <Image
                 alt="Ảnh bài đăng"
                 className="object-cover"
