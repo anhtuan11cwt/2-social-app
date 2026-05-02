@@ -1,8 +1,12 @@
+"use client";
+
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
 import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { CommentInput, CommentList } from "@/components/comment";
 import type { Post } from "@/types/post";
 import LikeButton from "./LikeButton";
 
@@ -11,6 +15,8 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  const [showComments, setShowComments] = useState(false);
+
   return (
     <article className="hover:bg-gray-900/50 p-4 border-gray-800 border-b transition-colors">
       <Link className="block" href={`/post/${post.id}`}>
@@ -70,9 +76,10 @@ export default function PostCard({ post }: PostCardProps) {
           postId={post.id}
         />
 
-        <Link
+        <button
           className="group flex items-center gap-2 text-gray-500 hover:text-blue-500 transition-colors"
-          href={`/post/${post.id}`}
+          onClick={() => setShowComments(!showComments)}
+          type="button"
         >
           <MessageCircle
             aria-hidden="true"
@@ -81,8 +88,16 @@ export default function PostCard({ post }: PostCardProps) {
           <span className="text-sm">
             {(post._count?.comments ?? 0) || (post.comments?.length ?? 0)}
           </span>
-        </Link>
+        </button>
       </div>
+
+      {/* Comments Section */}
+      {showComments && (
+        <div className="mt-3 border-gray-800 border-t">
+          <CommentList postId={post.id} />
+          <CommentInput postId={post.id} />
+        </div>
+      )}
     </article>
   );
 }

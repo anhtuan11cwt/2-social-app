@@ -74,7 +74,9 @@ export default function PostFeed() {
 
       {/* End of feed message */}
       {!hasNextPage && allPosts.length > 0 && (
-        <div className="py-4 text-gray-500 text-center">No more posts</div>
+        <div className="py-4 text-gray-500 text-center">
+          Không còn bài đăng nào
+        </div>
       )}
 
       {/* Infinite scroll trigger */}
