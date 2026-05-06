@@ -5,14 +5,6 @@ import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 import { useEffect } from "react";
 
-type NotificationPayload = {
-  id?: string;
-  message?: string;
-  postId?: string | null;
-  read?: boolean;
-  type?: string;
-};
-
 export default function PusherSubscriber() {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
@@ -34,9 +26,7 @@ export default function PusherSubscriber() {
 
     const channel = pusher.subscribe(`notifications-${session.user.id}`);
 
-    channel.bind("new-notification", (data: NotificationPayload) => {
-      console.log("Thông báo mới:", data);
-
+    channel.bind("new-notification", () => {
       // Invalidate notifications query to refetch latest data
       queryClient.invalidateQueries({
         queryKey: ["notifications"],

@@ -30,8 +30,6 @@ export async function GET() {
       },
     });
 
-    console.log("🔍 Suggestions API - Raw users data:", users);
-
     // Query follows separately to ensure fresh data
     const follows = await prisma.follow.findMany({
       select: {
@@ -44,8 +42,6 @@ export async function GET() {
         },
       },
     });
-
-    console.log("🔍 Suggestions API - Follow records:", follows);
 
     const followingIds = new Set(follows.map((f) => f.followingId));
 

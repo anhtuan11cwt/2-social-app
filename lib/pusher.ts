@@ -17,10 +17,3 @@ export const pusher = new Pusher({
   secret: requireEnv("PUSHER_SECRET"),
   useTLS: true,
 });
-
-if (process.env.NODE_ENV === "development") {
-  console.log(
-    "Pusher đã được khởi tạo với cluster:",
-    process.env.PUSHER_CLUSTER,
-  );
-}

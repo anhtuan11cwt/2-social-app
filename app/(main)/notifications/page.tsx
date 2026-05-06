@@ -40,7 +40,7 @@ export default function NotificationsPage() {
         // Refetch notifications để cập nhật navbar
         queryClient.invalidateQueries({ queryKey: ["notifications"] });
       } catch (error) {
-        console.error("Error marking notifications as read:", error);
+        console.error("Lỗi khi đánh dấu thông báo đã đọc:", error);
       }
     };
 
@@ -91,7 +91,7 @@ export default function NotificationsPage() {
   return (
     <div className="bg-dark-1 p-6 min-h-screen text-white">
       <div className="mx-auto max-w-2xl">
-        <h1 className="mb-6 font-bold text-2xl">Notifications</h1>
+        <h1 className="mb-6 font-bold text-2xl">Thông báo</h1>
 
         {notifications.length === 0 ? (
           <div className="bg-dark-2 p-8 rounded-lg text-center">
